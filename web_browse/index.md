@@ -38,6 +38,8 @@
 
 TCPコネクションを利用して、Webページの取得要求をサーバに伝えます
 
+![HTTPRequest](img/Request.png)
+
 # 5. [サーバが応答を返却する](5.md)
 - サーバはRequestに対する応答と Webページの本体を返却します
 - HttpRequestに対する処理結果をステータスコードと呼びます
