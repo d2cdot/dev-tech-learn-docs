@@ -11,7 +11,7 @@
     - S3はストレージ”サーバ”なのでサイトの公開に利用できたりします。
 
 ## ドメインかIPアドレス
-[URLの説明](/tech_learn_docs/web_browse/1.md)、[ドメインの説明](/tech_learn_docs/web_browse/2.md) で記述した通り、
+[URLの説明](/tech_learn_docs/web_browse/1.html)、[ドメインの説明](/tech_learn_docs/web_browse/2.html) で記述した通り、
 接続するためのIPアドレス(=グローバルネットワークへの接続）と、ドメイン名が必要です。
 
 IPアドレスはネットワークに所属することで与えられます。
