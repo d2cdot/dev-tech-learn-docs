@@ -14,7 +14,7 @@
 10. [画面が表示される！](web_browse/10.md)
 
 # 実際にサーバを用意してみよう
-## Webページの公開に必要なもの
+## [Webページの公開に必要なもの](handson/server/necessary.md)
 - サーバ
 - ドメイン
 ## 実践編:AWS ec2
