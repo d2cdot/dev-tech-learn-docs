@@ -18,8 +18,7 @@
 - サーバ
 - ドメイン
 ## 実践編:AWS ec2
-### サーバを作ろう！
-1. [インスタンスを作成する](handson/server/aws_ec2/server_1.md)
+### [サーバを作ろう！](handson/server/aws_ec2/server_1.md)
 ### ドメインを設定しよう！
 1. 独自ドメインを手に入れる
 2. インスタンスに固定IPを設定する
