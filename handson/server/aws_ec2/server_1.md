@@ -1,35 +1,36 @@
 # サーバを作ろう！
 
-本ページでは、AWS EC2 でインスタンスを立てて、nginxをインストールするところまでの手順を記載します。
+本ページでは、AWS EC2 のインスタンスにWebサーバをインストールするところまでの手順を記載します。
 
 公式のドキュメントがあるので、それを参考に作成しています。
-<a href="https://aws.amazon.com/jp/premiumsupport/knowledge-center/create-linux-instance/" target="_blank">Amazon Linux インスタンスを作成する - AWS</a>
-<a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html" target="_blank">Amazon EC2 Linux インスタンス入門</a>
+[Amazon Linux インスタンスを作成する - AWS](https://aws.amazon.com/jp/premiumsupport/knowledge-center/create-linux-instance/)
+[Amazon EC2 Linux インスタンス入門](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html)
 
 
 # 構築の流れ
 - AWSコンソールにログインする
 - EC2 インスタンスを作成する
 - セキュリティグループを変更してHTTPでアクセスできるようにする
-- SSHアクセスできるようにする
-- nginxをインストールする
+- 作成したインスタンスにSSHアクセスできるようにする
+- インスタンスにWebサーバをインストールする
 
 # AWSコンソールにログインする
-AWSアカウントを作成してコンソールにログインする
+まずは、AWSアカウントを作成してコンソールにログインしましょう
 
-公式の手順が一番わかりやすいので、そちらを参照
-<a href="https://aws.amazon.com/jp/register-flow/" target="_blank">AWS アカウント作成の流れ</a>
+公式の手順が一番わかりやすいので、そちらを参照してください
+[AWS アカウント作成の流れ](https://aws.amazon.com/jp/register-flow/)
 
 
 
-# リージョンを選択する
+# EC2 インスタンスを作成する
+
+## リージョンを選択する
 
 EC2インタンスを作成する前に、どこのリージョンにインタンスを作るのかを決めます。
 
 リージョンは国単位に分かれており、これを選ぶことは「自分のAWSのデータを、どこの国のデータセンターに作成するのか」を選ぶことに相当します。
 
-<a href="https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/using-regions-availability-zones.html" target="_blank">リージョンとゾーン - Amazon Elastic Compute Cloud</a>
-
+参考　[リージョンとゾーン - Amazon Elastic Compute Cloud](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)
 
 リージョンを選ぶ場合、「料金」と「利用できるサービス」と「通信速度」が選考のポイントになると思います。
 
@@ -38,7 +39,7 @@ EC2インタンスを作成する前に、どこのリージョンにインタ�
 
 使用したいAWSサービスを決めた上で、「料金」「利用できるサービス」「通信速度」の観点から最適なリージョンを選択しましょう。
 
-参考　<a href="https://cloud-textbook.com/734/"  target="_blank">AWS のリージョンの選び方</a>
+参考　[AWS のリージョンの選び方](https://cloud-textbook.com/734/)
 
 ### リージョン選択方法
 
@@ -49,14 +50,12 @@ EC2インタンスを作成する前に、どこのリージョンにインタ�
 ![region_01](..\img\region_01.png)
 
 
-# EC2 インスタンスを作成する
-
 ## EC2画面に移動
 
-コンソールの上にある検索欄に「EC2」と入れて検索し、表示されたらそれを選択します。
+インスタンス作成のため、EC2のダッシュボードに移動します。
+
+コンソールの上にある検索欄に「EC2」と入れて検索すると、EC2サービスが表示されるのでそれを選択します。
 ![ec2_01](../img/ec2_01.png)
-
-
 
 
 
@@ -65,6 +64,9 @@ EC2インタンスを作成する前に、どこのリージョンにインタ�
 ## インスタンス作成画面に移動
 
 E2Cのダッシュボードに移動するので、「インスタンスを起動」を選択します。
+
+遷移先の画面から、作成するインスタンスの設定を選択してゆきます。
+
 ![ec2_02.png](../img/ec2_02.png)
 
 
@@ -72,25 +74,26 @@ E2Cのダッシュボードに移動するので、「インスタンスを起�
 ## OSを選択
 
 作成するインスタンスのOSを選択します。
-今回はAmazon Linux2を選びます。無料なので
+今回はAmazon Linux2を選びます。（無料なので）
 
 ![ec2_03.png](../img/ec2_03.png)
 
 
 
-OSを選ぶ時に64ビット(x86)と64ビット(Arm)を選べます
+OSを選ぶ時に64ビット(x86)と64ビット(Arm)を選べますが
 これによって後に選択できるインスタンス タイプが変わります。
 
-無料枠で利用する場合はx86を選びます。
+今回はx86を選びます。
 
 
 
 ## インスタンスタイプを選択
 
 インスタンスタイプはCPU性能とかメモリ容量とかディスク容量だとかのスペックの組み合わせにt2.microとかの名前を付けたものです。
-<a href="https://aws.amazon.com/jp/ec2/instance-types/" target="_blank">Amazon EC2 インスタンスタイプ</a>
 
-今回はt2.microを選びます。無料なので
+参考 [Amazon EC2 インスタンスタイプ](https://aws.amazon.com/jp/ec2/instance-types/)
+
+今回はt2.microを選びます。（無料なので）
 
 「確認と作成」を選択して確認画面に遷移します。
 
@@ -137,7 +140,9 @@ OSを選ぶ時に64ビット(x86)と64ビット(Arm)を選べます
 特定の通信を許可したり禁止したりする設定のグループです。
 
 デフォルトではSSH以外の通信はNGになっているようなので
-HTTPの通信を許可してやる必要があります。
+Webサーバとして扱うにはHTTPの通信を許可してやる必要があります。
+
+
 
 まずはセキュリティグループの編集画面に移動します。
 
@@ -170,65 +175,154 @@ HTTPの設定を追加しましょう
 特にSSHを全てのIPアドレスからアクセス許可してしまうのは危険なので、なるべく自分のIPからしかアクセスを受け付けないよう制御をかけましょう
 
 自身のIPアドレスを調べるのはwebサービスを使うのが簡単です
-https://www.cman.jp/network/support/go_access.cgi
+[IPアドレス確認サイト](https://www.cman.jp/network/support/go_access.cgi)
 
 IPアドレスが分かったら、ソースを「カスタム」にして、調べたアドレスを入力しましょう。
 
 もしくは、ソースに「マイIP」を選択すれば、自動で自分のIPを設定してくれます。
 
-# SSHでアクセスする
-
-作成したインスタンスにSSHでアクセスします。
-自分のSSHクライアントで以下を実行します。
-
-```
-$ ssh -i "キーペア.pem" ec2-user@"インスタンスのIPアドレス"
-```
-
-・キーペア.pemはインスタンス作成時にダウンロードしたキーペアを指定してください
-・ユーザ名はデフォルトのec2-userになります。
-・インスタンスのIPアドレスは作成したインスタンスの詳細ページにある「パブリックIP4アドレス」がそれに当たります。
-
-
-もしアクセスできない場合はセキュリティグループでSSHと自身のIPアドレスが許可されているか確認してみてください
 
 
 
 
+# 作成したインスタンスにSSHアクセスできるようにする
 
-# nginxをインストールする
+インスタンスのシェルへアクセスする方法は複数ありますが、今回はSession Managerを使って作成したインスタンスにアクセスしましょう。
 
-SSH接続できたらnginxをインストールします。
+Session ManagerはAWS Systems Manager 機能の１つです。
+この機能を使ってインスタンスにSSHアクセスすることができます。
 
-amazon-linux-extrasというコマンドはAmazon Linux2用のyumコマンドのようなもので
-Amazon Linux2がサポートしている最新verの各種パッケージがインストールできるようです。
+AWS Systems Manager というシステムを踏み台サーバにして、EC2インスタンスにSSH接続するイメージです。
 
-■Amazon Linux Extras
-https://aws.amazon.com/amazon-linux-2/faqs/#Amazon_Linux_Extras
+Session Managerを使ってアクセスすることで
+ ・ログが取れる
+ ・ログインするユーザの権限を細かく制限できる
+ などのメリットを受けることができます。
+
+ 参考　[セッションマネージャー越しにSSHアクセスすると何が嬉しいのか](https://dev.classmethod.jp/articles/ssh-through-session-manager/)
+
+
+
+## IAMロールの作成
+
+まずはIAM ロールを作成します。
+ここで作るロールは、インスタンスが AWS Systems Manager の機能を使用できるようにするものです。
+
+
+
+### 手順1
+・AWSサービスから「IAM」を選択
+・左メニューから「ロール」を選択
+・「ロール作成」ボタンを選択
+
+![sm_01.png](../img/sm_01.png)
+
+### 手順2
+・エンティティの種類に「AWSサービス」を選択
+
+・ユースケースに「EC2」を選択し次の画面に遷移
+![sm_02.png](../img/sm_02.png)
+
+
+
+### 手順3
+
+・ポリシーの検索窓にAmazonSSMManagedInstanceCore を入力
+・表示された権限にチェックして次の画面に遷移
+![sm_03.png](../img/sm_03.png)
+
+
+
+### 手順4
+
+・画面に従いタグを付けて次の画面に遷移（必須ではない）
+・画面に従いロール名を付けてロールを作成（任意の名前でOK)
+
+
+
+## EC2インスタンスにIAMロールをアタッチする
+先程作ったIAMロールをEC2インスタンスにアタッチします。
+これにより、アタッチしたインスタンスが AWS Systems Manager の機能（Session Manager等)を使えるようになります。
+
+### 手順1
+・作成したインスタンスの詳細画面を開く
+・「インスタンスの状態」＞「セキュリティ」＞「IAMロールを変更」を選択
+![sm_04.png](../img/sm_04.png)
+
+### 手順2
+・先程作ったIAMロールを選択して保存
+![sm_05.png](../img/sm_05.png)
+
+
+##　インスタンスのシェルにアクセスする
+これでSession Managerを使う準備が整ったので、早速アクセスしてみます。
+
+### 手順1
+・AWSサービスから「AWS Systems Manager」を選択
+・左メニューから「セッションマネージャー」を選択
+・「セッションの開始」ボタンを選択
+・アクセスできるインスタンスが表示されるので、選択して「セッションを開始する」を選択
+![sm_06.png](../img/sm_06.png)
+
+
+
+以下のような画面になっていたら成功です。
+![sm_07.png](../img/sm_07.png)
+
+
+
+# インスタンスにWebサーバをインストールする
+
+インスタンスに接続できたら今度はWebサーバ（nginx）をインストールします。
+
+
+
+以下コマンドをシェル上で実行し、nginxをインストールして下さい
 
 
 ```
 sudo amazon-linux-extras install nginx1
 ```
 
+
+
+ここで使っているamazon-linux-extrasというコマンドはAmazon Linux2用のyumコマンドのようなもので
+Amazon Linux2がサポートしている最新verの各種パッケージがインストールできるようです。
+
+■Amazon Linux Extras
+https://aws.amazon.com/amazon-linux-2/faqs/#Amazon_Linux_Extras
+
+
+
 インストールできたらnginxを起動します。
 
 ```
+# nginx起動
 $ sudo systemctl start nginx
 
 # 起動できたか確認
 $ systemctl status nginx
 ```
 
-これで設定は終わりです。
-ブラウザからhttpで以下URLにアクセスしてみましょう
-無事に作成したインスタンスにアクセスできれば、以下画面が表示されます。
-<a>http://{インスタンスにsshする時に指定したIPアドレス}</a>
-例　http://3.113.110.154/
+## ブラウザからアクセスする
+webサーバがちゃんと立ち上げられたのか確かめるため、ブラウザからアクセスしてみましょう
 
 
+ブラウザに入力するURLは以下です。
+
+<a>http://{インスタンスのパブリックIPv4アドレス}</a>
+
+例：　http://ec2-13-112-23-166.ap-northeast-1.compute.amazonaws.com
+
+パブリックIPv4アドレスは、以下のインスタンス概要画面で確認できます。
 
 ![ec2_09.png](../img/ec2_09.png)
+
+
+
+無事にWebサーバが稼働していれば、以下画面が表示されます。
+
+![ec2_10.png](../img/ec2_10.png)
 
 もし、表示されなければセキュリティグループの設定を見直して
 ・HTTPが許可されていること
