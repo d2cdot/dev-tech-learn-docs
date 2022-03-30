@@ -1,5 +1,5 @@
 # Webページの公開に必要なもの
-[ブラウザでWebページをみるときのながれ](/tech_learn_docs/web_browse/) を参考に実際にWebページを公開するときに必要なものを考えます。
+[ブラウザでWebページをみるときのながれ](/dev-tech-learn-docs/web_browse/) を参考に実際にWebページを公開するときに必要なものを考えます。
 
 ## サーバ
 公開するWebページを置くサーバが必要です。
@@ -11,7 +11,7 @@
     - S3はストレージ”サーバ”なのでサイトの公開に利用できたりします。
 
 ## ドメインかIPアドレス
-[URLの説明](/tech_learn_docs/web_browse/1.html)、[ドメインの説明](/tech_learn_docs/web_browse/2.html) で記述した通り、
+[URLの説明](/dev-tech-learn-docs/web_browse/1.html)、[ドメインの説明](/dev-tech-learn-docs/web_browse/2.html) で記述した通り、
 接続するためのIPアドレス(=グローバルネットワークへの接続）と、ドメイン名が必要です。
 
 IPアドレスはネットワークに所属することで与えられます。
